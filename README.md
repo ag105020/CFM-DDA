@@ -3,7 +3,7 @@
 Preparation:
 Download all the files, put them in one folder and organize path.
 
-Plotting Fig 2,3,4A:
+Plotting Fig 2,4A and for obtaining values for Fig. 3:
 Run D000_00_09
 
 Plotting Fig 4B:
