@@ -142,7 +142,7 @@ sf('C_Supply_Consumption')
 
 figure(9)
 plot(Mu,Mu*QcV+Mu*QcV*E+Mu*QcH+Mu*QcH*E+Fn2fixC,':',color="#2CA02C",label="Consumption")
-plot(Mu,Mu*QcV+Mu*QcV*E+Mu*QcH+Mu*QcH*E+Fn2fixC*QnV/Qn,color="#2CA02C",label="Consumption*")
+plot(Mu,Mu*QcV+Mu*QcV*E+Mu*QcH+Mu*QcH*E+Fn2fixC*(QnV+QnH)/Qn,color="#2CA02C",label="Consumption*")
 plot(Mu,FphoV,'--',color="#2CA02C",label="Supply")
 xlabel(Xlabel)
 ti("C budget for Chain")
@@ -204,6 +204,7 @@ b = Mu*QnH/QcC/Fn2fixN*100
 c = Mu*QnD/QcC/Fn2fixN*100
 
 values = [nanmean(a),nanmean(b),nanmean(c)]
+
 #-----------------------------------------------------------------------
 # Checking (if these are not equal, that means there is Mu dependence)
 #-----------------------------------------------------------------------
@@ -264,6 +265,7 @@ a = FphoV/Fpho*100
 b = FphoD/Fpho*100
 
 values = [nanmean(a),nanmean(b)]
+print(values)
 #-----------------------------------------------------------------------
 # Checking (if these are not equal, that means there is Mu dependence)
 #-----------------------------------------------------------------------
@@ -314,9 +316,9 @@ sf("Pie_C_cost_DDA")
 #++++++++++++++++++++++++++++++++++++++
 
 #++++++++++++++++++++++++++++++++++++++++
-# C budget for the chain
+# C source for the chain
 #++++++++++++++++++++++++++++++++++++++++
-tot = Mu*QcV+Mu*QcV*E+Mu*QcH+Mu*QcH*E+Fn2fixC*QnV/Qn
+tot = Mu*QcV+Mu*QcV*E+Mu*QcH+Mu*QcH*E+Fn2fixC*(QnV+QnH)/Qn
 a = FphoV/tot*100
 b = (tot-FphoV)/tot*100
 
@@ -335,7 +337,7 @@ if round(b[-1],10) != round(nanmean(b),10):
 #-----------------------------
 figure(17)
 pie(values,labels=['Chain','Diatom'],autopct='%1.0f%%',startangle=90,counterclock=False,textprops={'size':23},wedgeprops=dict(edgecolor='k',linewidth=1.5))#,textprops={'size':30})
-title("C budget in Chain")
+title("C source in Chain")
 sf("Pie_C_budget_Chain")
 #++++++++++++++++++++++++++++++++++++++
 
@@ -397,6 +399,99 @@ pie(values,labels=['Veg','Het','Diatom'],autopct='%1.0f%%',startangle=90,counter
 title("Q$_{N}$")
 sf("Pie_Qn")
 print('Qn',c/(a+b))
+#++++++++++++++++++++++++++++++++++++++
+
+#++++++++++++++++++++++++++++++++++++++++
+# C consumption Chain
+#++++++++++++++++++++++++++++++++++++++++
+tot = Mu*QcV+Mu*QcV*E+Mu*QcH+Mu*QcH*E+Fn2fixC
+
+a = (Mu*QcV+Mu*QcV*E+Mu*QcH+Mu*QcH*E)/tot*100
+b = Fn2fixC/tot*100
+
+values = [nanmean(a),nanmean(b)]
+#-----------------------------------------------------------------------
+# Checking (if these are not equal, that means there is Mu dependence)
+#-----------------------------------------------------------------------
+    
+if round(a[-1],10) != round(nanmean(a),10):
+    print("no good")
+    Print(a)
+if round(b[-1],10) != round(nanmean(b),10):
+    print("no good")
+    Print(b)
+#-----------------------------
+
+figure(23)
+pie(values,labels=['Veg','Het'],autopct='%1.0f%%',startangle=90,counterclock=False,textprops={'size':23},wedgeprops=dict(edgecolor='k',linewidth=1.5))#,textprops={'size':30})
+title("C consumption in the Chain")
+sf("Pie_C_consumpt_Chain")
+
+#++++++++++++++++++++++++++++++++++++++
+
+#++++++++++++++++++++++++++++++++++++++++
+# C consumption in DDA
+#++++++++++++++++++++++++++++++++++++++++
+tot = Mu*QcD*(1+E)+Mu*QcV+Mu*QcV*E+Mu*QcH+Mu*QcH*E+Fn2fixC
+a = Mu*QcD*(1+E)/tot*100
+b = (Mu*QcV+Mu*QcV*E+Mu*QcH+Mu*QcH*E)/tot*100
+c = Fn2fixC/tot*100
+
+values = [nanmean(a),nanmean(b),nanmean(c)]
+#-----------------------------------------------------------------------
+# Checking (if these are not equal, that means there is Mu dependence)
+#-----------------------------------------------------------------------
+    
+if round(a[-1],10) != round(nanmean(a),10):
+    print("no good")
+    Print(a)
+if round(b[-1],10) != round(nanmean(b),10):
+    print("no good")
+    Print(b)
+if round(c[-1],10) != round(nanmean(c),10):
+    print("no good")
+    Print(c)
+#-----------------------------
+
+figure(24)
+pie(values,labels=['Dia','Veg','Het'],autopct='%1.0f%%',startangle=90,counterclock=False,textprops={'size':23},wedgeprops=dict(edgecolor='k',linewidth=1.5))#,textprops={'size':30})
+title("C consumption in DDA")
+sf("Pie_C_consumpt_DDA")
+
+#++++++++++++++++++++++++++++++++++++++
+
+#++++++++++++++++++++++++++++++++++++++++
+# Initial C flux in DDA
+#++++++++++++++++++++++++++++++++++++++++
+tot = Fpho
+a = Mu*QcD*(1+E)/tot*100
+b = (Mu*QcV+Mu*QcV*E+Mu*QcH+Mu*QcH*E+Fn2fixC-FphoV)/tot*100
+c = FphoV/tot*100
+
+values = [nanmean(a),nanmean(b),nanmean(c)]
+#-----------------------------------------------------------------------
+# Checking (if these are not equal, that means there is Mu dependence)
+#-----------------------------------------------------------------------
+    
+if round(a[-1],10) != round(nanmean(a),10):
+    print("no good")
+    Print(a)
+if round(b[-1],10) != round(nanmean(b),10):
+    print("no good")
+    Print(b)
+if round(c[-1],10) != round(nanmean(c),10):
+    print("no good")
+    Print(c)
+#-----------------------------
+
+figure(25)
+pie(values,labels=['Dia','Dia-Chain','Chain'],autopct='%1.0f%%',startangle=90,counterclock=False,textprops={'size':23},wedgeprops=dict(edgecolor='k',linewidth=1.5))#,textprops={'size':30})
+title("Inicial C flux in DDA")
+sf("Pie_C_flux_initial_DDA")
+
+
+print(Fpho/Fn2fixN/14*12)
+print(Qn/QnC)
 #++++++++++++++++++++++++++++++++++++++
 
 if PanelPlot == 1:
